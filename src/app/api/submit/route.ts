@@ -3,11 +3,11 @@ import { Resend } from "resend";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "info@movescout.net";
 const MAX_ATTACHMENT_SIZE = 25 * 1024 * 1024; // 25MB
 
 export async function POST(request: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || "info@movescout.net";
   try {
     const formData = await request.formData();
     
