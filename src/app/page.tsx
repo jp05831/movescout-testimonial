@@ -43,7 +43,7 @@ export default function Home() {
       <nav className="relative">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center">
-            <img src="/logo.png" alt="MoveScout" className="h-10" />
+            <img src="/logo.png" alt="MoveScout" className="h-7" />
           </div>
           <a href="https://movescout.net" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
             ← Back to site
