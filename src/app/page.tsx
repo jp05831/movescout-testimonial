@@ -42,13 +42,8 @@ export default function Home() {
       {/* Nav */}
       <nav className="relative">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-500/20">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </div>
-            <span className="text-xl font-bold text-gray-900">MoveScout</span>
+          <div className="flex items-center">
+            <img src="/logo.png" alt="MoveScout" className="h-10" />
           </div>
           <a href="https://movescout.net" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
             ← Back to site
@@ -58,19 +53,14 @@ export default function Home() {
 
       {/* Hero */}
       <header className="relative max-w-3xl mx-auto px-6 pt-12 pb-16 md:pt-16 md:pb-20 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/60 mb-6">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-sm font-semibold text-emerald-800">Limited time offer</span>
-        </div>
-        
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight leading-[1.15] mb-5">
           Share your story,{" "}
           <span className="gradient-text">earn $100</span>
         </h1>
         
         <p className="text-lg text-gray-700 leading-relaxed mb-8 max-w-xl mx-auto">
-          Record a quick video about your experience with MoveScout. 
-          We'll add <strong>$100 in ad credits</strong> to your next campaign as a thank you.
+          Record a quick video about your experience with MoveScout 
+          and receive <strong>$100 in credits</strong> as a thank you.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-medium text-gray-600">
