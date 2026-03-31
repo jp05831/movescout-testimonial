@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { upload } from "@vercel/blob/client";
 import VideoRecorder from "./VideoRecorder";
 
 interface FormData {
@@ -53,7 +54,7 @@ export default function TestimonialForm() {
     setIsSubmitting(true);
 
     try {
-      // Step 1: Upload video to Vercel Blob
+      // Step 1: Upload video directly to Vercel Blob (client-side)
       setUploadProgress("Uploading video...");
       
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
@@ -61,14 +62,10 @@ export default function TestimonialForm() {
       const extension = formData.videoFile.name.split(".").pop() || "webm";
       const filename = `${safeName}_${timestamp}.${extension}`;
 
-      const uploadResponse = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
-        method: "POST",
-        body: formData.videoFile,
+      const blob = await upload(filename, formData.videoFile, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
       });
-
-      if (!uploadResponse.ok) throw new Error("Failed to upload video");
-      
-      const blob = await uploadResponse.json();
       
       // Step 2: Submit form with video URL
       setUploadProgress("Finalizing...");
@@ -87,7 +84,8 @@ export default function TestimonialForm() {
 
       if (!response.ok) throw new Error("Failed to submit");
       setIsSubmitted(true);
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
