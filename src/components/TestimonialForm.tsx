@@ -18,6 +18,7 @@ export default function TestimonialForm() {
     videoFile: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,15 +53,36 @@ export default function TestimonialForm() {
     setIsSubmitting(true);
 
     try {
-      const submitData = new FormData();
-      submitData.append("businessName", formData.businessName);
-      submitData.append("contactName", formData.contactName);
-      submitData.append("email", formData.email);
-      submitData.append("video", formData.videoFile);
+      // Step 1: Upload video to Vercel Blob
+      setUploadProgress("Uploading video...");
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const safeName = formData.businessName.replace(/[^a-zA-Z0-9]/g, "_").substring(0, 50);
+      const extension = formData.videoFile.name.split(".").pop() || "webm";
+      const filename = `${safeName}_${timestamp}.${extension}`;
 
+      const uploadResponse = await fetch(`/api/upload?filename=${encodeURIComponent(filename)}`, {
+        method: "POST",
+        body: formData.videoFile,
+      });
+
+      if (!uploadResponse.ok) throw new Error("Failed to upload video");
+      
+      const blob = await uploadResponse.json();
+      
+      // Step 2: Submit form with video URL
+      setUploadProgress("Finalizing...");
+      
       const response = await fetch("/api/submit", {
         method: "POST",
-        body: submitData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessName: formData.businessName,
+          contactName: formData.contactName,
+          email: formData.email,
+          videoUrl: blob.url,
+          videoFilename: filename,
+        }),
       });
 
       if (!response.ok) throw new Error("Failed to submit");
@@ -69,6 +91,7 @@ export default function TestimonialForm() {
       setError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
+      setUploadProgress(null);
     }
   };
 
@@ -166,7 +189,7 @@ export default function TestimonialForm() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Submitting...
+            {uploadProgress || "Submitting..."}
           </span>
         ) : (
           "Submit testimonial"
